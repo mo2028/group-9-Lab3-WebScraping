@@ -11,12 +11,13 @@ class Scraper
     def find_instructor instructor
 
         # generate search query based on instructor's first name and last name
-        url = @url + "/teachers?query=" + instructor.firstName.downcase + "%20" + instructor.lastName.downcase + "&sid=U2Nob29sLTcyNA=="
+        url = @url + "/teachers?query=" + instructor.firstName.downcase[0..1] + "%20" + instructor.lastName.downcase + "&sid=U2Nob29sLTcyNA=="
 
         # store raw HTML from the query
         doc = Nokogiri::HTML(open(url))
 
         potentialMatches = []
+        similarityScores = []
 
         # scan the HTML for matches to "legacyId:", and store all legacy IDs in an array. these are used to generate new URLs which are then used to
         # select the most likely instructor in the event that two instructors have the same name
@@ -28,28 +29,35 @@ class Scraper
         # professor, we search through all of the URLs and use the one that matches the department given in the class code (such as 'CSE 3901').
         # For example, say that there are two professors named Charlie Giles at Ohio State, with one of them being from the CSE department and
         # the other from the EDU department. If we search for Charlie Giles, we find the legacyId of both of them, generate a new query for each,
-        # and only populate the instructor's ratings if "CSE" shows up at least once on the page. That way, we don't give the user information about
-        # the Charlie Giles from the EDU department if they requested information about a CSE class.
+        # and populate the instructor's ratings based on the page that contains text that most closely matches "CSE"
         agent = Mechanize.new
         potentialMatches.each do |legacyId|
             url = "https://www.ratemyprofessors.com/ShowRatings.jsp?tid=#{legacyId}"
             page = agent.get(url)
 
-            # here is where we check whether the instructor's department shows up on the page
-            if page.body.include?(instructor.department)
-                instructor.avgRating = page.search('.liyUjw').text
-                instructor.numRatings = page.search('.jMkisx a').text.to_i
-
-                otherInfo = page.search('.kkESWs').map(&:text)
-                instructor.wouldTakeAgainPercent = otherInfo[0]
-                instructor.avgDifficulty = otherInfo[1]
-
-                # If we populate the instructor's rating information, we don't need to keep looking through other professors if there
-                # are multiple with the same name, hence this break statement.
-                break
+            # Search page and find similarity score (how much does department match text on the page)
+            i = 0
+            while page.body.include?(instructor.department[0..i])
+                if i.equal?(instructor.department.length-1)
+                    break
+                end
+                i += 1
             end
+            similarityScores.push i
         end
 
+        # open the page that most closely matches the instructor's department
+        bestMatch = potentialMatches[similarityScores.index(similarityScores.max)]
+        url = "https://www.ratemyprofessors.com/ShowRatings.jsp?tid=#{bestMatch}"
+        page = agent.get(url)
+
+        # populate instructor information
+        instructor.avgRating = page.search('.liyUjw').text
+        instructor.numRatings = page.search('.jMkisx a').text.to_i
+
+        otherInfo = page.search('.kkESWs').map(&:text)
+        instructor.wouldTakeAgainPercent = otherInfo[0]
+        instructor.avgDifficulty = otherInfo[1]
     end
 
 end
