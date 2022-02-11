@@ -21,7 +21,7 @@ puts "Number of Ratings: " + greg.numRatings.to_s
 puts "Would take again percent: " + greg.wouldTakeAgainPercent
 puts "Average difficulty: " + greg.avgDifficulty
 
-puts ""
+puts "\n"
 
 RMPScraper.find_instructor(dave);
 puts "First Name: " + dave.firstName
