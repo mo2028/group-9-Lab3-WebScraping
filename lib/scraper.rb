@@ -14,7 +14,7 @@ class Scraper
         url = @url + "/teachers?query=" + instructor.firstName.downcase[0..1] + "%20" + instructor.lastName.downcase + "&sid=U2Nob29sLTcyNA=="
 
         # store raw HTML from the query
-        doc = Nokogiri::HTML(open(url))
+        doc = Nokogiri::HTML(URI.open(url))
 
         potentialMatches = []
         similarityScores = []
@@ -37,12 +37,7 @@ class Scraper
 
             # Search page and find similarity score (how much does department match text on the page)
             i = 0
-            while page.body.include?(instructor.department[0..i])
-                if i.equal?(instructor.department.length-1)
-                    break
-                end
-                i += 1
-            end
+            i += 1 while i < instructor.department.length - 1 && page.body.include?(instructor.department[0..i])
             similarityScores.push i
         end
 
