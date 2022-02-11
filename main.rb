@@ -12,13 +12,13 @@ instructors = []
 dave = Instructor.new("David", "Ogle", "CSE")
 greg = Instructor.new("Gregory", "Smith", "POLITSC")
 
-RMPScraper.find_instructor(greg);
+RMPScraper.find_instructor(dave);
 
 
-puts "First Name: " + greg.firstName
-puts "Last Name: " + greg.lastName
-puts "Department: " + greg.department
-puts "Average Rating: " + greg.avgRating
-puts "Number of Ratings: " + greg.numRatings.to_s
-puts "Would take again percent: " + greg.wouldTakeAgainPercent
-puts "Average difficulty: " + greg.avgDifficulty
+puts "First Name: " + dave.firstName
+puts "Last Name: " + dave.lastName
+puts "Department: " + dave.department
+puts "Average Rating: " + dave.avgRating
+puts "Number of Ratings: " + dave.numRatings.to_s
+puts "Would take again percent: " + dave.wouldTakeAgainPercent
+puts "Average difficulty: " + dave.avgDifficulty

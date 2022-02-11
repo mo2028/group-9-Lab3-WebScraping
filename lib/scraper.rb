@@ -14,7 +14,7 @@ class Scraper
         url = @url + "/teachers?query=" + instructor.firstName.downcase[0..1] + "%20" + instructor.lastName.downcase + "&sid=U2Nob29sLTcyNA=="
 
         # store raw HTML from the query
-        doc = Nokogiri::HTML(open(url))
+        doc = Nokogiri::HTML(URI.open(url))
 
         potentialMatches = []
         similarityScores = []
