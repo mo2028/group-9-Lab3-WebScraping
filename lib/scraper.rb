@@ -2,6 +2,7 @@ require 'mechanize'
 require 'nokogiri'
 require 'open-uri'
 require_relative 'instructor'
+require_relative 'course'
 
 class Scraper
     def initialize(url)
@@ -53,6 +54,14 @@ class Scraper
         otherInfo = page.search('.kkESWs').map(&:text)
         instructor.wouldTakeAgainPercent = otherInfo[0]
         instructor.avgDifficulty = otherInfo[1]
+    end
+
+    def find_csecourse c
+        url = @url + "?q=cse%20#{cnum}&campus=col&p=1&term=1222&subject=cse"
+        doc = Nokogiri::HTML(URI.open(url))
+
+        url = "https://classes.osu.edu/class-search/#/?q=cse%20#{c.cnum}&campus=col&p=1&term=1222"
+        page = agent.get(url)
     end
 
 end
