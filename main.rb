@@ -23,5 +23,4 @@ puts "Average difficulty: " + greg.avgDifficulty
 
 cScraper = Scraper.new classSearchURL
 cnum = gets.chomp
-c3901 = Course.new cnum
-cScraper.find_csecourse c3901
+cScraper.find_csecourse cnum # Put a course class into the course scraper.

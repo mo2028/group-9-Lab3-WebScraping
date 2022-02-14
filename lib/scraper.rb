@@ -56,12 +56,30 @@ class Scraper
         instructor.avgDifficulty = otherInfo[1]
     end
 
-    def find_csecourse c
-        url = @url + "?q=cse%20#{cnum}&campus=col&p=1&term=1222&subject=cse"
-        doc = Nokogiri::HTML(URI.open(url))
+    def find_csecourse cnum
+        # url = @url + "?q=cse%20#{cnum}&campus=col&p=1&term=1222&subject=cse"
+        # doc = Nokogiri::HTML(URI.open(url))
 
-        url = "https://classes.osu.edu/class-search/#/?q=cse%20#{c.cnum}&campus=col&p=1&term=1222"
+        url = "https://classes.osu.edu/class-search/#/?q=cse%20#{cnum}&campus=col&p=1&term=1222"
         page = agent.get(url)
+        courseArray = []
+
+        cname = page.search('.col-md-12.light.course-info span').text # cname is always the same.
+
+        page.search('.row div.section-container.ng-scope').each do
+            courseArray.push (Course.new cnum, cname) # Each section's course number and course name should be same.
+        end
+
+        courseArray.each do |index, c|
+            c.snum = page.search('span.lightweight.ng-binding').text
+            c.imode = page.search('.row p.ng-binding').text
+            c.cAttr = page.search('.attribute-heading.right span').text
+            c.place = page.search('.col-md-6.col-sm-7 p.ng-binding').text
+            c.time = page.search('.meeting-time.ng-binding').text
+        end
+
+        return courseArray # return an array of all sections of cse cnum course.
+
     end
 
 end
