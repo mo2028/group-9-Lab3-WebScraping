@@ -3,6 +3,7 @@ class Course
     def initialize(cnum, cname)
         @cnum = cnum # course number like 3901
         @cname = cname # course name like Project: Design, Development, and Documentation of Web Applications
+        @instructor = nil # like an Instructor class of Charlie
         @snum = nil #section number like 0040 (25212)
         @imode = nil # instruction mode like in person
         @cAttr = nil # course attribute like level 1

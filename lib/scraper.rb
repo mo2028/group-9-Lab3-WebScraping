@@ -71,6 +71,15 @@ class Scraper
         end
 
         courseArray.each do |index, c|
+            instructorName = page.search('.col-md-6.col-sm-5 li').text
+            i, j = 0, instructorName.length
+            i += 1 while instructorName[i] != " "
+            j -= 1 while instructorName[j] != " "
+            fName = instructorName[0..i - 1]
+            lName = instructorName[j + 1..instructorName.length - 1]
+
+            c.instructor = Instructor.new fName, lName, "CSE"
+
             c.snum = page.search('span.lightweight.ng-binding').text
             c.imode = page.search('.row p.ng-binding').text
             c.cAttr = page.search('.attribute-heading.right span').text

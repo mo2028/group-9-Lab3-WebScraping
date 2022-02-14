@@ -5,22 +5,23 @@ require 'json'
 RMPurl = "https://www.ratemyprofessors.com/search"
 classSearchURL = "https://classes.osu.edu/class-search/#/"
 
-RMPScraper = Scraper.new(RMPurl)
-instructors = []
+# RMPScraper = Scraper.new(RMPurl)
+# instructors = []
 
-# pretty much everything after this line was just for me to test my scraper with ratemyprofessor.com 
-dave = Instructor.new("David", "Ogle", "CSE")
-greg = Instructor.new("Gregory", "Smith", "POLITSC")
+# # pretty much everything after this line was just for me to test my scraper with ratemyprofessor.com 
+# dave = Instructor.new("David", "Ogle", "CSE")
+# greg = Instructor.new("Gregory", "Smith", "POLITSC")
 
-RMPScraper.find_instructor(greg)
-puts "First Name: " + greg.firstName
-puts "Last Name: " + greg.lastName
-puts "Department: " + greg.department
-puts "Average Rating: " + greg.avgRating
-puts "Number of Ratings: " + greg.numRatings.to_s
-puts "Would take again percent: " + greg.wouldTakeAgainPercent
-puts "Average difficulty: " + greg.avgDifficulty
+# RMPScraper.find_instructor(greg)
+# puts "First Name: " + greg.firstName
+# puts "Last Name: " + greg.lastName
+# puts "Department: " + greg.department
+# puts "Average Rating: " + greg.avgRating
+# puts "Number of Ratings: " + greg.numRatings.to_s
+# puts "Would take again percent: " + greg.wouldTakeAgainPercent
+# puts "Average difficulty: " + greg.avgDifficulty
 
 cScraper = Scraper.new classSearchURL
 cnum = gets.chomp
-cScraper.find_csecourse cnum # Put a course class into the course scraper.
+# Put a course class into the course scraper, return an array of all sections of cnum.
+courseArray = cScraper.find_csecourse cnum 
