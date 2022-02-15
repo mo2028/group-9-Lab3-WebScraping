@@ -23,9 +23,10 @@ def printRmp instructorList
         j -= 1 while instructor[j] != " "
         fName = instructor[0..i - 1]
         lName = instructor[j + 1..instructor.length - 1]
+
         instructors[k] =  Instructor.new fName, lName, "CSE"
         RMPScraper.find_instructor instructors[k]
-        k += 1
+
         puts "First Name: " + instructors[k].firstName
         puts "Last Name: " + instructors[k].lastName
         puts "Department: " + instructors[k].department
@@ -33,6 +34,8 @@ def printRmp instructorList
         puts "Number of Ratings: " + instructors[k].numRatings.to_s
         puts "Would take again percent: " + instructors[k].wouldTakeAgainPercent
         puts "Average difficulty: " + instructors[k].avgDifficulty
+        
+        k += 1
     end
 
     instructors
