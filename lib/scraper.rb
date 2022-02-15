@@ -57,7 +57,7 @@ class Scraper
         instructor.avgDifficulty = otherInfo[1]
     end
 
-    def find_course cnum
+    def getInstructors cnum
         url = @url + "/search?q=#{cnum[0]}%20#{cnum[1]}&campus=col&p=1&term=1222"
         doc = JSON.parse(Nokogiri::HTML(URI.open(url)))
 
@@ -81,6 +81,7 @@ class Scraper
             instructorList |= [doc['data']['courses'][i]['sections'][x]['meetings'][0]['instructors'][0]['displayName']]
         end
         puts instructorList
+        instructorList
     end
 
 end

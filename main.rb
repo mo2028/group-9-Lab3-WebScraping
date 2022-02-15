@@ -28,4 +28,5 @@ cnum[0] = gets.chomp.downcase
 print "Enter a course number (example: \"3901\" or \"3345\" or \"2060\"): "
 cnum[1] = gets.chomp
 # Put a course class into the course scraper, return an array of all sections of cnum.
-courseArray = cScraper.find_course cnum 
+instructorList = getInstructors cnum 
+instructors = printRmp instructorList
