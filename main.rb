@@ -3,8 +3,8 @@ require './lib/instructor'
 require 'json'
 
 RMPurl = "https://www.ratemyprofessors.com/search"
-classSearchURL = "https://classes.osu.edu/class-search/#/"
-
+classSearchURL = "https://content.osu.edu/v2/classes"
+cnum = []
 # RMPScraper = Scraper.new(RMPurl)
 # instructors = []
 
@@ -22,6 +22,10 @@ classSearchURL = "https://classes.osu.edu/class-search/#/"
 # puts "Average difficulty: " + greg.avgDifficulty
 
 cScraper = Scraper.new classSearchURL
-cnum = gets.chomp
+print "Enter a course subject (example: \"CSE\" or \"MATH\" or \"ECE\"): "
+cnum[0] = gets.chomp.downcase
+
+print "Enter a course number (example: \"3901\" or \"3345\" or \"2060\"): "
+cnum[1] = gets.chomp
 # Put a course class into the course scraper, return an array of all sections of cnum.
-courseArray = cScraper.find_csecourse cnum 
+courseArray = cScraper.find_course cnum 

@@ -1,6 +1,7 @@
 require 'mechanize'
 require 'nokogiri'
 require 'open-uri'
+require 'json'
 require_relative 'instructor'
 require_relative 'course'
 
@@ -56,39 +57,30 @@ class Scraper
         instructor.avgDifficulty = otherInfo[1]
     end
 
-    def find_csecourse cnum
-        # url = @url + "?q=cse%20#{cnum}&campus=col&p=1&term=1222&subject=cse"
-        # doc = Nokogiri::HTML(URI.open(url))
+    def find_course cnum
+        url = @url + "/search?q=#{cnum[0]}%20#{cnum[1]}&campus=col&p=1&term=1222"
+        doc = JSON.parse(Nokogiri::HTML(URI.open(url)))
 
-        url = "https://classes.osu.edu/class-search/#/?q=cse%20#{cnum}&campus=col&p=1&term=1222"
-        page = agent.get(url)
-        courseArray = []
+        # initialize empty list of instructors 
+        instructorList = []
+        
+        # store number of returned courses
+        numberOfCourses = doc['data']['courses'].size
 
-        cname = page.search('.col-md-12.light.course-info span').text # cname is always the same.
-
-        page.search('.row div.section-container.ng-scope').each do
-            courseArray.push (Course.new cnum, cname) # Each section's course number and course name should be same.
+        # find the correct course to correctly identify instructors
+        i = -1
+        numberOfCourses.times do |x|
+            if (doc['data']['courses'][x]['course']['subject'].casecmp(cnum[0]) == 0) && (doc['data']['courses'][0]['course']['catalogNumber'].to_i).equal?(cnum[1].to_i)
+                i = x
+                break
+            end
         end
 
-        courseArray.each do |index, c|
-            instructorName = page.search('.col-md-6.col-sm-5 li').text
-            i, j = 0, instructorName.length
-            i += 1 while instructorName[i] != " "
-            j -= 1 while instructorName[j] != " "
-            fName = instructorName[0..i - 1]
-            lName = instructorName[j + 1..instructorName.length - 1]
-
-            c.instructor = Instructor.new fName, lName, "CSE"
-
-            c.snum = page.search('span.lightweight.ng-binding').text
-            c.imode = page.search('.row p.ng-binding').text
-            c.cAttr = page.search('.attribute-heading.right span').text
-            c.place = page.search('.col-md-6.col-sm-7 p.ng-binding').text
-            c.time = page.search('.meeting-time.ng-binding').text
+        # push all unique instructor names associated with the given course to the array 
+        doc['data']['courses'][i]['sections'].size.times do |x|
+            instructorList |= [doc['data']['courses'][i]['sections'][x]['meetings'][0]['instructors'][0]['displayName']]
         end
-
-        return courseArray # return an array of all sections of cse cnum course.
-
+        puts instructorList
     end
 
 end
