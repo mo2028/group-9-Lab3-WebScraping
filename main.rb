@@ -1,32 +1,21 @@
 require './lib/scraper'
 require './lib/instructor'
-require 'json'
 
-RMPurl = "https://www.ratemyprofessors.com/search"
-classSearchURL = "https://content.osu.edu/v2/classes"
+CLASS_SEARCH_URL = "https://www.coursicle.com/osu/courses"
+RMP_URL = "https://www.ratemyprofessors.com/search"
 cnum = []
-# RMPScraper = Scraper.new(RMPurl)
-# instructors = []
+instructorList = []
 
-# # pretty much everything after this line was just for me to test my scraper with ratemyprofessor.com 
-# dave = Instructor.new("David", "Ogle", "CSE")
-# greg = Instructor.new("Gregory", "Smith", "POLITSC")
-
-# RMPScraper.find_instructor(greg)
-# puts "First Name: " + greg.firstName
-# puts "Last Name: " + greg.lastName
-# puts "Department: " + greg.department
-# puts "Average Rating: " + greg.avgRating
-# puts "Number of Ratings: " + greg.numRatings.to_s
-# puts "Would take again percent: " + greg.wouldTakeAgainPercent
-# puts "Average difficulty: " + greg.avgDifficulty
-
-cScraper = Scraper.new classSearchURL
 print "Enter a course subject (example: \"CSE\" or \"MATH\" or \"ECE\"): "
-cnum[0] = gets.chomp.downcase
+cnum[0] = gets.chomp.upcase
 
 print "Enter a course number (example: \"3901\" or \"3345\" or \"2060\"): "
 cnum[1] = gets.chomp
-# Put a course class into the course scraper, return an array of all sections of cnum.
-instructorList = getInstructors cnum 
-instructors = printRmp instructorList
+
+# create a scraper to scrape coursicle.com, put a course identifier into the course scraper, return an array of all sections of cnum.
+cScraper = Scraper.new CLASS_SEARCH_URL
+instructorList = cScraper.getInstructors cnum 
+
+# create a scraper to scrape ratemyprofessor.com and find the ratings of each professor in instructorList
+rmpScraper = Scraper.new RMP_URL
+instructors = printRmp(rmpScraper, cnum[0], instructorList)

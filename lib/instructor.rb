@@ -11,32 +11,29 @@ class Instructor
     end
 end
 
-def printRmp instructorList
-    RMPurl = "https://www.ratemyprofessors.com/search"
-    RMPScraper = Scraper.new RMPurl
+def printRmp rmpScraper, department, instructorList
+    # initialize empty array of instructor objects
+    instructors = []
 
-    instructors, k = [], 0
+    instructorList.length.times do |i|
+        # get the first and last name of the each instructor from the mechanize link object
+        instructorName = instructorList[i].text.split
+        fName = instructorName.first
+        lName = instructorName.last
 
-    instructorList.each do |instructor|
-        i, j = 0, instructor.length
-        i += 1 while instructor[i] != " "
-        j -= 1 while instructor[j] != " "
-        fName = instructor[0..i - 1]
-        lName = instructor[j + 1..instructor.length - 1]
-
-        instructors[k] =  Instructor.new fName, lName, "CSE"
-        RMPScraper.find_instructor instructors[k]
-
-        puts "First Name: " + instructors[k].firstName
-        puts "Last Name: " + instructors[k].lastName
-        puts "Department: " + instructors[k].department
-        puts "Average Rating: " + instructors[k].avgRating
-        puts "Number of Ratings: " + instructors[k].numRatings.to_s
-        puts "Would take again percent: " + instructors[k].wouldTakeAgainPercent
-        puts "Average difficulty: " + instructors[k].avgDifficulty
+        # add instructor to the list of instructor objects, and search ratemyprofessor for that instructor
+        instructors[i] = Instructor.new fName, lName, department
+        rmpScraper.getInstructorRating instructors[i]
         
-        k += 1
+        # print important information about each instructor
+        puts ""
+        puts "First Name: " + instructors[i].firstName
+        puts "Last Name: " + instructors[i].lastName
+        puts "Average Rating: " + instructors[i].avgRating
+        puts "Number of Ratings: " + instructors[i].numRatings.to_s
+        puts "Would take again percent: " + instructors[i].wouldTakeAgainPercent
+        puts "Average difficulty: " + instructors[i].avgDifficulty
+        puts ""
     end
-
     instructors
 end
