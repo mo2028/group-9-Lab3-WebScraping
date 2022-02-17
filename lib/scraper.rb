@@ -12,25 +12,19 @@ class Scraper
     end
 
     def getInstructors cnum
-#<<<<<<< HEAD
         url = @url + "/search?q=#{cnum[0]}%20#{cnum[1]}&campus=col&p=1&term=1222"
         doc = JSON.parse(Nokogiri::HTML(URI.open(url)))
 
-#=======
         # generate search query based on class department and number
         url = @url + "/#{cnum[0].upcase}/#{cnum[1]}"
         agent = Mechanize.new
         agent.user_agent_alias = 'Linux Mozilla'
-        
-#>>>>>>> f972331461e6e2d3baaac80da96c5aa5b4275f70
+
         # initialize empty list of instructors 
-        instructorList = []
-        
         # store number of returned courses
-        numberOfCourses = doc['data']['courses'].size
+        instructorList, numberOfCourses, i = [], doc['data']['courses'].size, -1
 
         # find the correct course to correctly identify instructors
-        i = -1
         numberOfCourses.times do |x|
             if (doc['data']['courses'][x]['course']['subject'].casecmp(cnum[0]) == 0) && (doc['data']['courses'][0]['course']['catalogNumber'].to_i).equal?(cnum[1].to_i)
                 i = x
