@@ -40,7 +40,7 @@ class Scraper
     end
 
     def getInstructorRating instructor
-        # firstNameTake is the length of instructor's first name for searching on rmp
+        # firstNameTake is the number of characters of instructor's first name.
         firstNameTake = case instructor.firstName.length
         when 0..4
             instructor.firstName.downcase[0..1]
