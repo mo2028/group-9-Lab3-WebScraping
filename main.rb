@@ -16,5 +16,6 @@ instructorList = cScraper.getInstructors cnum
 
 # create a scraper to scrape ratemyprofessor.com and find the ratings of each professor in instructorList
 rmpScraper = Scraper.new RMP_URL
-puts "\nHere is the information of instructors who teach #{cnum[0]} #{cnum[1]} in Spring term.\n"
+puts "\nHere is the information of instructors who teach #{cnum[0]} #{cnum[1]} in SP22.\n"
 instructors = printRmp rmpScraper, cnum[0], instructorList
+puts "There are #{instructors.length} teachers teaching #{cnum[0]} #{cnum[1]} in SP22."
