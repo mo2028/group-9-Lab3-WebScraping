@@ -19,7 +19,6 @@ class Scraper
 
         # retrieve the page from coursicle
         page = agent.get(url)
-        puts page.title
 
         # find all instructors listed on the page if the page is found
         instructorList = page.links_with(href: %r{https://www.coursicle.com/osu/professors/})
