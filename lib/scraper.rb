@@ -12,12 +12,14 @@ class Scraper
         # generate search query based on class department and number
         url = @url + "/#{cnum[0].upcase}/#{cnum[1]}"
         agent = Mechanize.new
-
+        agent.user_agent_alias = 'Linux Mozilla'
+        
         # initialize empty list of instructors 
         instructorList = []
 
         # retrieve the page from coursicle
         page = agent.get(url)
+        puts page.title
 
         # find all instructors listed on the page if the page is found
         instructorList = page.links_with(href: %r{https://www.coursicle.com/osu/professors/})
