@@ -1,45 +1,35 @@
 require 'mechanize'
 require 'nokogiri'
 require 'open-uri'
-require 'json'
 require_relative 'instructor'
 
 class Scraper
-    attr_accessor :url
-    
-    def initialize url
+    def initialize(url)
         @url = url 
     end
 
-    def getInstructors cnum
-        url = @url + "/search?q=#{cnum[0]}%20#{cnum[1]}&campus=col&p=1&term=1222"
-        doc = JSON.parse(Nokogiri::HTML(URI.open(url)))
+    def url
+        @url
+    end
 
+    def getInstructors cnum
         # generate search query based on class department and number
         url = @url + "/#{cnum[0].upcase}/#{cnum[1]}"
         agent = Mechanize.new
         agent.user_agent_alias = 'Linux Mozilla'
-
+        
         # initialize empty list of instructors 
-        # store number of returned courses
-        instructorList, numberOfCourses, i = [], doc['data']['courses'].size, -1
+        instructorList = []
 
-        # find the correct course to correctly identify instructors
-        numberOfCourses.times do |x|
-            if (doc['data']['courses'][x]['course']['subject'].casecmp(cnum[0]) == 0) && (doc['data']['courses'][0]['course']['catalogNumber'].to_i).equal?(cnum[1].to_i)
-                i = x
-                break
-            end
-        end
+        # retrieve the page from coursicle
+        page = agent.get(url)
 
-        # push all unique instructor names associated with the given course to the array 
-        doc['data']['courses'][i]['sections'].size.times do |x|
-            instructorList |= [doc['data']['courses'][i]['sections'][x]['meetings'][0]['instructors'][0]['displayName']]
-        end
-        instructorList
+        # find all instructors listed on the page if the page is found
+        instructorList = page.links_with(href: %r{https://www.coursicle.com/osu/professors/})
     end
 
     def getInstructorRating instructor
+
         # firstNameTake is the number of characters of instructor's first name.
         firstNameTake = case instructor.firstName.length
         when 0..4
@@ -52,9 +42,8 @@ class Scraper
             instructor.firstName.downcase
         end
 
-
         # generate search query based on instructor's first name and last name
-        url = @url + "/teachers?query=" + firstNameTake + "%20" + instructor.lastName.downcase + "&sid=U2Nob29sLTcyNA=="
+        url = @url + "/teachers?query=" + instructor.firstName.downcase[0..1] + "%20" + instructor.lastName.downcase + "&sid=U2Nob29sLTcyNA=="
 
         # store raw HTML from the query
         doc = Nokogiri::HTML(URI.open(url))
@@ -77,7 +66,7 @@ class Scraper
             agent = Mechanize.new
             potentialMatches.each do |legacyId|
                 url = "https://www.ratemyprofessors.com/ShowRatings.jsp?tid=#{legacyId}"
-                page = agent.get url
+                page = agent.get(url)
 
                 # Search page and find similarity score (how much does department match text on the page)
                 i = 0
