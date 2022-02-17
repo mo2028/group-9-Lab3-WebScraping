@@ -1,14 +1,12 @@
 require './lib/scraper'
 require './lib/instructor'
 
-CLASS_SEARCH_URL = "https://www.coursicle.com/osu/courses"
+CLASS_SEARCH_URL = "https://content.osu.edu/v2/classes"
 RMP_URL = "https://www.ratemyprofessors.com/search"
-cnum = []
-instructorList = []
+cnum, instructorList = [], []
 
 print "Enter a course subject (example: \"CSE\" or \"MATH\" or \"ECE\"): "
 cnum[0] = gets.chomp.upcase
-
 print "Enter a course number (example: \"3901\" or \"3345\" or \"2060\"): "
 cnum[1] = gets.chomp
 
@@ -18,4 +16,5 @@ instructorList = cScraper.getInstructors cnum
 
 # create a scraper to scrape ratemyprofessor.com and find the ratings of each professor in instructorList
 rmpScraper = Scraper.new RMP_URL
-instructors = printRmp(rmpScraper, cnum[0], instructorList)
+puts "\nHere is the information of instructors who teach #{cnum[0]} #{cnum[1]} in Spring term.\n"
+instructors = printRmp rmpScraper, cnum[0], instructorList
