@@ -70,7 +70,7 @@ class Scraper
             lastNameOnPage = page.search('.glXOHH').text.split[0]
             if lastNameOnPage == instructor.lastName
                 # populate instructor information
-                instructor.avgRating = page.search('.liyUjw').text
+                instructor.avgRating = page.search('.liyUjw').text + "/5"
                 instructor.numRatings = page.search('.jMkisx a').text.to_s if page.search('.jMkisx a').text.to_s != "Add a rating."
 
                 otherInfo = page.search('.kkESWs').map(&:text)
