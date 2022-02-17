@@ -49,7 +49,7 @@ class Scraper
         when 7..8
             instructor.firstName.downcase[0..3]
         else
-            instructor.firstName
+            instructor.firstName.downcase
         end
 
 
