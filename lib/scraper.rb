@@ -12,7 +12,6 @@ class Scraper
         # generate search query based on class department and number
         url = @url + "/#{cnum[0].upcase}/#{cnum[1]}"
         agent = Mechanize.new
-        agent.user_agent_alias = 'Mac Safari'
 
         # initialize empty list of instructors 
         instructorList = []
