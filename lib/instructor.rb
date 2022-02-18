@@ -30,7 +30,7 @@ def printRmp rmpScraper, department, instructorList
         puts "First Name: " + instructors[i].firstName
         puts "Last Name: " + instructors[i].lastName
         puts "Average Rating: " + instructors[i].avgRating
-        puts "Number of Ratings: " + instructors[i].numRatings.to_s
+        puts "Number of Ratings: " + instructors[i].numRatings
         puts "Would take again percent: " + instructors[i].wouldTakeAgainPercent
         puts "Average difficulty: " + instructors[i].avgDifficulty
         puts ""

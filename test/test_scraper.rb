@@ -81,7 +81,7 @@ class TestScraper < MiniTest::Test
         assert_equal @testCharlie.lastName, "Giles"
         assert_equal @testCharlie.department, "CSE"
         assert_equal @testCharlie.avgRating, "4.2/5"
-        assert_equal @testCharlie.numRatings.to_str.split[0], "7"
+        assert_equal @testCharlie.numRatings.gsub(/[[:space:]]/, ''), "7ratings"
         assert_equal @testCharlie.wouldTakeAgainPercent, "67%"
         assert_equal @testCharlie.avgDifficulty, "2.5"
 
@@ -90,7 +90,7 @@ class TestScraper < MiniTest::Test
         assert_equal @testScott.lastName, "Sharkey"
         assert_equal @testScott.department, "CSE"
         assert_equal @testScott.avgRating, "1/5"
-        #assert_equal @testScott.numRatings.to_s, "1 ratings"
+        assert_equal @testScott.numRatings.gsub(/[[:space:]]/, ''), "1ratings"
         assert_equal @testScott.wouldTakeAgainPercent, "0%"
         assert_equal @testScott.avgDifficulty, "4"
 
@@ -99,25 +99,27 @@ class TestScraper < MiniTest::Test
         assert_equal @testAdam.lastName, "Champion"
         assert_equal @testAdam.department, "CSE"
         assert_equal @testAdam.avgRating, "2.2/5"
-        #assert_equal @testAdam.numRatings.to_s, "43 ratings"
+        assert_equal @testAdam.numRatings.gsub(/[[:space:]]/, ''), "43ratings"
         assert_equal @testAdam.wouldTakeAgainPercent, "14%"
         assert_equal @testAdam.avgDifficulty, "3.7"
 
+        
         @testRMPUrl.getInstructorRating @testPaolo
         assert_equal @testPaolo.firstName, "Paolo"
         assert_equal @testPaolo.lastName, "Bucci"
         assert_equal @testPaolo.department, "CSE"
         assert_equal @testPaolo.avgRating, "3.1/5"
-        #assert_equal @testPaolo.numRatings.to_s, "109 ratings"
+        assert_equal @testPaolo.numRatings.gsub(/[[:space:]]/, ''), "109ratings"
         assert_equal @testPaolo.wouldTakeAgainPercent, "35%"
         assert_equal @testPaolo.avgDifficulty, "4"
+        
 
         @testRMPUrl.getInstructorRating @testIsabel
         assert_equal @testIsabel.firstName, "Isabel"
         assert_equal @testIsabel.lastName, "Puentes"
         assert_equal @testIsabel.department, "ECE"
         assert_equal @testIsabel.avgRating, "3.9/5"
-        #assert_equal @testIsabel.numRatings.to_s, "22 ratings"
+        assert_equal @testIsabel.numRatings.gsub(/[[:space:]]/, ''), "22ratings"
         assert_equal @testIsabel.wouldTakeAgainPercent, "69%"
         assert_equal @testIsabel.avgDifficulty, "3"
 
