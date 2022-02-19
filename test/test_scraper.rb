@@ -6,7 +6,8 @@ class TestScraper < MiniTest::Test
     def setup
         # Set up two Scrapers for search score on RMP and search instructors on osu web.
         @testRMPUrl = Scraper.new "https://www.ratemyprofessors.com/search"
-        @testSearchUrl = Scraper.new "https://www.coursicle.com/osu/courses/"
+        @testSearchUrl = Scraper.new "https://content.osu.edu/v2/classes"
+        @testCoursicleUrl = Scraper.new "https://www.coursicle.com/osu/courses/"
         @testGoogle = Scraper.new "https://www.google.com"
         
         # Set up classes to look for in tests
@@ -29,48 +30,50 @@ class TestScraper < MiniTest::Test
     def test_has_url
         assert_respond_to @testRMPUrl, :url
         assert_respond_to @testSearchUrl, :url
+        assert_respond_to @testCoursicleUrl, :url
         assert_respond_to @testGoogle, :url
     end
 
     def test_remembers_url
         assert_equal "https://www.ratemyprofessors.com/search", @testRMPUrl.url
-        assert_equal "https://www.coursicle.com/osu/courses/", @testSearchUrl.url
+        assert_equal "https://content.osu.edu/v2/classes", @testSearchUrl.url
+        assert_equal "https://www.coursicle.com/osu/courses/", @testCoursicleUrl.url
         assert_equal "https://www.google.com", @testGoogle.url
     end
 
-    def test_getInstructorsCoursicle
+    def test_getInstructorsOSU
         expCse3901Instr = ["Bob Joseph", "Charlie Giles", "Scott Sharkey", "Dustin Williams", "Paul Sivilotti", "Mukul Soundarajan", "Paolo Sivilotti", "Robert Joseph", "Charles Giles", "Naeem Shareef"]
-        cse3901Instr,i = @testSearchUrl.getInstructorsCoursicle(@cse3901),0
+        cse3901Instr,i = @testSearchUrl.getInstructorsOSU(@cse3901),0
         cse3901Instr.each do |instr|
-            assert_equal instr.text, expCse3901Instr[i]
+            assert_equal instr, expCse3901Instr[i]
             i+=1
         end
 
         expMath3345Instr = ["Andrzej Derdzinski", "Zbigniew Fiedorowicz", "Jingyin Huang", "Tae Kim", "Max Kutler", "Caroline Terry", "Yeor Hafuta", "Daniel Thompson", "Gabe Conant", "Trent Ohl", "Roy Joshua", "Alexander Mcdonald", "Ghaith Hiary", "Anthony Nance", "Nigel Pynn-Coates", "Kenneth Koenig"]
-        math3345Instr,i = @testSearchUrl.getInstructorsCoursicle(@math3345),0
+        math3345Instr,i = @testSearchUrl.getInstructorsOSU(@math3345),0
         math3345Instr.each do |instr|
-            assert_equal instr.text, expMath3345Instr[i]
+            assert_equal instr, expMath3345Instr[i]
             i+=1
         end
 
         expEce2020Instr = ["Isabel Puentes", "To Announced", "Harshith Gunturu", "Hamza Anwar", "Furrukh Khan", "Arti Vedula", "Amber Arquitola", "Liang Guo", "Banaful Paul", "Hao Li", "Gregg Chapman", "Huaqing Xiong", "Siamak Shojaei", "Daijiafan Mao", "Benjamin Coifman", "Himaja Kesavareddigari"]
-        ece2020Instr,i = @testSearchUrl.getInstructorsCoursicle(@ece2020),0
+        ece2020Instr,i = @testSearchUrl.getInstructorsOSU(@ece2020),0
         ece2020Instr.each do |instr|
-            assert_equal instr.text, expEce2020Instr[i]
+            assert_equal instr, expEce2020Instr[i]
             i+=1
         end
 
         expEce2060Instr = ["Furrukh Khan", "To Announced", "Bernie Melus", "Xinmiao Zhang", "Betty Anderson", "Ryan Patton", "Mustafa Cantas", "Maruf Hossain", "Ananya Mahanti", "George Valco", "Gregg Chapman", "Banaful Paul", "Zhe Wang", "Xiaodan Wang", "Himaja Kesavareddigari", "Jiantong Li"]
-        ece2060Instr,i = @testSearchUrl.getInstructorsCoursicle(@ece2060),0
+        ece2060Instr,i = @testSearchUrl.getInstructorsOSU(@ece2060),0
         ece2060Instr.each do |instr|
-            assert_equal instr.text, expEce2060Instr[i]
+            assert_equal instr, expEce2060Instr[i]
             i+=1
         end
 
         expCse2221Instr = ["Veronica Thai", "Paul Sivilotti", "Paolo Bucci", "Michael Fritz", "Mirkamil Mierkamili", "Adam Grupa", "Steve Gomori", "Piyush Chawla", "Jeremy Grifski", "Alan Weide", "Nyigel Spann", "Christine Kiel", "Rui Qiu", "Max Taylor", "Eduardo Gainza", "Matt Boggus"]
-        cse2221Instr,i = @testSearchUrl.getInstructorsCoursicle(@cse2221),0
+        cse2221Instr,i = @testSearchUrl.getInstructorsOSU(@cse2221),0
         cse2221Instr.each do |instr|
-            assert_equal instr.text, expCse2221Instr[i]
+            assert_equal instr, expCse2221Instr[i]
             i+=1
         end
     end
