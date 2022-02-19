@@ -11,51 +11,29 @@ class Instructor
     end
 end
 
-def printRmpCoursicle rmpScraper, department, instructorList
-    # initialize empty array of instructor objects
-    instructors, i = [], 0
-
-    instructorList.each do |instructorNames|
-        puts "\nNo.#{i + 1}:"
-        # get the first and last name of the each instructor from the mechanize link object
-        instructorName = instructorNames.text.split(" ")
-        fName = instructorName[0]
-        lName = instructorName[instructorName.length - 1]
-
-        # add instructor to the list of instructor objects, and search ratemyprofessor for that instructor
-        instructor = Instructor.new fName, lName, department
-        instructors << instructor
-        rmpScraper.getInstructorRating instructor
-        
-        # print important information about each instructor
-        puts "First Name: " + instructor.firstName
-        puts "Last Name: " + instructor.lastName
-        puts "Average Rating: " + instructor.avgRating
-        puts "Number of Ratings: " + instructor.numRatings.to_s
-        puts "Would take again percent: " + instructor.wouldTakeAgainPercent
-        puts "Average difficulty: " + instructor.avgDifficulty
-        puts ""
-        i += 1
-    end
-    instructors
-end
-
-def printRmpOSU rmpScraper, department, instructorList
+def printRmp rmpScraper, department, instructorList
     # initialize empty array of instructor objects
     instructors = []
 
     instructorList.length.times do |i|
-        # get the first and last name of the each instructor from the mechanize link object
-        instructorName = instructorList[i].split(" ")
-        fName = instructorName[0]
-        lName = instructorName[instructorName.length - 1]
+        puts "\nNo.#{i + 1}:"
+
+        # get the first and last name of the each instructor depending on which search was used (OSU or Coursicle)
+        if instructorList[i].is_a?(String)
+            instructorName = instructorList[i].split
+            fName = instructorName.first
+            lName = instructorName.last
+        else
+            instructorName = instructorList[i].text.split
+            fName = instructorName.first
+            lName = instructorName.last
+        end
 
         # add instructor to the list of instructor objects, and search ratemyprofessor for that instructor
         instructors[i] = Instructor.new fName, lName, department
         rmpScraper.getInstructorRating instructors[i]
         
         # print important information about each instructor
-        puts ""
         puts "First Name: " + instructors[i].firstName
         puts "Last Name: " + instructors[i].lastName
         puts "Average Rating: " + instructors[i].avgRating

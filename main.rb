@@ -7,6 +7,7 @@ RMP_URL = "https://www.ratemyprofessors.com/search"
 
 cnum = []
 instructorList = []
+rmpScraper = Scraper.new RMP_URL
 
 print "Enter a course subject (example: \"CSE\" or \"MATH\" or \"ECE\"): "
 cnum[0] = gets.chomp.upcase
@@ -14,6 +15,7 @@ cnum[0] = gets.chomp.upcase
 print "Enter a course number (example: \"3901\" or \"3345\" or \"2060\"): "
 cnum[1] = gets.chomp
 
+puts ""
 print "Enter '1' to scrape from the OSU Class Search Website\n"
 print "Enter '2' to scrape from Coursicle: (WARNING: EXPERIMENTAL - MAY NOT WORK ON ALL NETWORKS)\n"
 print "Enter anything else to quit the program\n"
@@ -24,28 +26,18 @@ if choice == '1'
     # create a scraper to scrape osu websire, put a course identifier into the course scraper, return an array of all sections of cnum.
     osuScraper = Scraper.new OSU_SEARCH_URL
     instructorList = osuScraper.getInstructorsOSU cnum 
-    print instructorList
-    # create a scraper to scrape ratemyprofessor.com and find the ratings of each professor in instructorList
-    #rmpScraper = Scraper.new RMP_URL
-    #instructors = printRmpOSU(rmpScraper, cnum[0], instructorList)
+
+    # retrieve information about professors found with the OSU class search
+    printRmp(rmpScraper, cnum[0], instructorList)
+
 elsif choice == '2'
     # create a scraper to scrape coursicle.com, put a course identifier into the course scraper, return an array of all sections of cnum.
     coursicleScraper = Scraper.new COURSICLE_SEARCH_URL
-    title = ""
-    instructorList = coursicleScraper.getInstructorsCoursicle cnum, title
-    if title == "Captcha | Turing Test 1.0"
-        print "You're not able to use COURSICLE SEARCH since you are in Captcha, enter 1 if you want to switch to OSU SEARCH: "
-        choice = gets.chomp
-        puts ""
-        if choice == '1'
-            osuScraper = Scraper.new OSU_SEARCH_URL
-            instructorList = osuScraper.getInstructorsOSU cnum 
-            # create a scraper to scrape ratemyprofessor.com and find the ratings of each professor in instructorList
-            rmpScraper = Scraper.new RMP_URL
-            instructors = printRmpOSU(rmpScraper, cnum[0], instructorList)
-        else abort "Goodbye.\n"
-        end
-    end
-else abort "Goodbye.\n"
+    instructorList = coursicleScraper.getInstructorsCoursicle cnum
+
+    # retrieve information about professors found with the Coursicle class search
+    printRmp(rmpScraper, cnum[0], instructorList)
+    
+else 
 end
 

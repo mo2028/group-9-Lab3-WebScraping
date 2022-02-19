@@ -5,15 +5,12 @@ require 'json'
 require_relative 'instructor'
 
 class Scraper
+    attr_accessor :url
     def initialize(url)
-        @url = url 
+        @url = url
     end
 
-    def url
-        @url
-    end
-
-    def getInstructorsCoursicle cnum, title
+    def getInstructorsCoursicle cnum
         # generate search query based on class department and number
         url = @url + "/#{cnum[0].upcase}/#{cnum[1]}"
         agent = Mechanize.new
@@ -26,6 +23,11 @@ class Scraper
         page = agent.get(url)
         title = page.title
         
+        # print error message if user runs into an issue with the coursicle captcha
+        if title.include? "aptcha"
+            abort "Sorry, the Coursicle search will not work on this network. Please restart the program and use the OSU class search instead."
+        end
+
         # find all instructors listed on the page if the page is found
         instructorList = page.links_with(href: %r{https://www.coursicle.com/osu/professors/})
     end
@@ -33,11 +35,6 @@ class Scraper
     def getInstructorsOSU cnum
         url = @url + "/search?q=#{cnum[0]}%20#{cnum[1]}&campus=col&p=1&term=1222"
         doc = JSON.parse(Nokogiri::HTML(URI.open(url)))
-
-        # generate search query based on class department and number
-        url = @url + "/#{cnum[0].upcase}/#{cnum[1]}"
-        agent = Mechanize.new
-        agent.user_agent_alias = 'Linux Mozilla'
 
         # initialize empty list of instructors 
         # store number of returned courses
@@ -59,19 +56,6 @@ class Scraper
     end
 
     def getInstructorRating instructor
-
-        # firstNameTake is the number of characters of instructor's first name.
-        firstNameTake = case instructor.firstName.length
-        when 0..4
-            instructor.firstName.downcase[0..1]
-        when 5..6
-            instructor.firstName.downcase[0..2]
-        when 7..8
-            instructor.firstName.downcase[0..3]
-        else
-            instructor.firstName.downcase
-        end
-
         # generate search query based on instructor's first name and last name
         url = @url + "/teachers?query=" + instructor.firstName.downcase[0..1] + "%20" + instructor.lastName.downcase + "&sid=U2Nob29sLTcyNA=="
 
