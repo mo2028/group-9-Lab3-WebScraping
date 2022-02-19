@@ -13,7 +13,7 @@ class Scraper
         @url
     end
 
-    def getInstructorsCoursicle cnum
+    def getInstructorsCoursicle cnum, title
         # generate search query based on class department and number
         url = @url + "/#{cnum[0].upcase}/#{cnum[1]}"
         agent = Mechanize.new
@@ -24,7 +24,8 @@ class Scraper
 
         # retrieve the page from coursicle
         page = agent.get(url)
-
+        title = page.title
+        
         # find all instructors listed on the page if the page is found
         instructorList = page.links_with(href: %r{https://www.coursicle.com/osu/professors/})
     end
