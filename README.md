@@ -17,6 +17,8 @@ Two prompts will show up asking you to enter a course subject and a course numbe
 
 You must enter a valid course at the Ohio State University or else the program will not be able to give you the appropriate results.
 
-Using the entered information, the program scrapes data from https://www.coursicle.com/osu/. The data collected covers the professors teaching that specific course. This list of professors is then used to scrape https://www.ratemyprofessors.com/. Using the data from Coursicle and Rate My Professor, professor information such as rating, difficulty, etc. will be output by the program.
+Using the entered information, the program scrapes data from https://www.coursicle.com/osu/ if chosen '1' or from https://classes.osu.edu/class-search/#/ if chosen '2'. The data collected covers the professors teaching that specific course. This list of professors is then used to scrape https://www.ratemyprofessors.com/ for information about the professor's average rating, number of ratings, would take again percent and average difficulty. The collected information is then outputted ot the user.
+
+**_Note_** that OSU Class Search gives the professors that are going to be teaching in the Spring 2022 semester, but Coursicle includes information about professors that have taught the class in the past as well.
 
 This data can be used in the decision-making process when scheduling classes.
