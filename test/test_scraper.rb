@@ -42,35 +42,35 @@ class TestScraper < MiniTest::Test
     end
 
     def test_getInstructorsOSU
-        expCse3901Instr = ["Bob Joseph", "Charlie Giles", "Scott Sharkey", "Dustin Williams", "Paul Sivilotti", "Mukul Soundarajan", "Paolo Sivilotti", "Robert Joseph", "Charles Giles", "Naeem Shareef"]
+        expCse3901Instr = ["Bob Joseph", "Charlie Giles", "Scott Sharkey", "Dustin Williams"]
         cse3901Instr,i = @testSearchUrl.getInstructorsOSU(@cse3901),0
         cse3901Instr.each do |instr|
             assert_equal instr, expCse3901Instr[i]
             i+=1
         end
 
-        expMath3345Instr = ["Andrzej Derdzinski", "Zbigniew Fiedorowicz", "Jingyin Huang", "Tae Kim", "Max Kutler", "Caroline Terry", "Yeor Hafuta", "Daniel Thompson", "Gabe Conant", "Trent Ohl", "Roy Joshua", "Alexander Mcdonald", "Ghaith Hiary", "Anthony Nance", "Nigel Pynn-Coates", "Kenneth Koenig"]
+        expMath3345Instr = ["Andrzej J Derdzinski", "Zbigniew Fiedorowicz", "Jingyin Huang", "Tae Eun Kim", "Max Kutler", "Caroline Terry", "Yeor Hafuta", "Daniel James Thompson", "Gabe Conant", "Trent H Ohl", "Roy Joshua", "Alexander Keith McDonald"]
         math3345Instr,i = @testSearchUrl.getInstructorsOSU(@math3345),0
         math3345Instr.each do |instr|
             assert_equal instr, expMath3345Instr[i]
             i+=1
         end
 
-        expEce2020Instr = ["Isabel Puentes", "To Announced", "Harshith Gunturu", "Hamza Anwar", "Furrukh Khan", "Arti Vedula", "Amber Arquitola", "Liang Guo", "Banaful Paul", "Hao Li", "Gregg Chapman", "Huaqing Xiong", "Siamak Shojaei", "Daijiafan Mao", "Benjamin Coifman", "Himaja Kesavareddigari"]
+        expEce2020Instr = ["Isabel Fernandez Puentes", nil, "Harshith Gunturu"]
         ece2020Instr,i = @testSearchUrl.getInstructorsOSU(@ece2020),0
         ece2020Instr.each do |instr|
             assert_equal instr, expEce2020Instr[i]
             i+=1
         end
 
-        expEce2060Instr = ["Furrukh Khan", "To Announced", "Bernie Melus", "Xinmiao Zhang", "Betty Anderson", "Ryan Patton", "Mustafa Cantas", "Maruf Hossain", "Ananya Mahanti", "George Valco", "Gregg Chapman", "Banaful Paul", "Zhe Wang", "Xiaodan Wang", "Himaja Kesavareddigari", "Jiantong Li"]
+        expEce2060Instr = ["Furrukh Saeed Khan", nil, "Bernie Melus", "Xinmiao Zhang"]
         ece2060Instr,i = @testSearchUrl.getInstructorsOSU(@ece2060),0
         ece2060Instr.each do |instr|
             assert_equal instr, expEce2060Instr[i]
             i+=1
         end
 
-        expCse2221Instr = ["Veronica Thai", "Paul Sivilotti", "Paolo Bucci", "Michael Fritz", "Mirkamil Mierkamili", "Adam Grupa", "Steve Gomori", "Piyush Chawla", "Jeremy Grifski", "Alan Weide", "Nyigel Spann", "Christine Kiel", "Rui Qiu", "Max Taylor", "Eduardo Gainza", "Matt Boggus"]
+        expCse2221Instr = ["Veronica Thai", "Paul Sivilotti", "Paolo Bucci", "Michael Fritz", "mirkamil Mierkamili", "Adam Russell Grupa", "Steve Gomori", "Piyush Chawla", "Jeremy Grifski", "Alan Weide", "Nyigel Keslyon Spann", "Christine Ann Kiel", "Rui Qiu"]
         cse2221Instr,i = @testSearchUrl.getInstructorsOSU(@cse2221),0
         cse2221Instr.each do |instr|
             assert_equal instr, expCse2221Instr[i]
