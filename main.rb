@@ -30,12 +30,10 @@ if choice == '1'
 elsif choice == '2'
     # create a scraper to scrape coursicle.com, put a course identifier into the course scraper, return an array of all sections of cnum.
     coursicleScraper = Scraper.new COURSICLE_SEARCH_URL
-    instructorList = coursicleScraper.getInstructorsCoursicle cnum
-    # create a scraper to scrape ratemyprofessor.com and find the ratings of each professor in instructorList
-    rmpScraper = Scraper.new RMP_URL
-    instructors = printRmpCoursicle(rmpScraper, cnum[0], instructorList)
-    if instructorList == [] 
-        print "You're not able to use COURSICLE SEARCH, enter 1 if you want to switch to OSU SEARCH: "
+    title = ""
+    instructorList = coursicleScraper.getInstructorsCoursicle cnum, title
+    if title = "Captcha | Turing Test 1.0"
+        print "You're not able to use COURSICLE SEARCH since you are in Captcha, enter 1 if you want to switch to OSU SEARCH: "
         choice = gets.chomp
         puts ""
         if choice == '1'
