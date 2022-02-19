@@ -13,27 +13,29 @@ end
 
 def printRmpCoursicle rmpScraper, department, instructorList
     # initialize empty array of instructor objects
-    instructors = []
+    instructors, i = [], 0
 
-    instructorList.length.times do |i|
+    instructorList.each do |instructorNames|
+        puts "\nNo.#{i + 1}:"
         # get the first and last name of the each instructor from the mechanize link object
-        instructorName = instructorList[i].text.split
-        fName = instructorName.first
-        lName = instructorName.last
+        instructorName = instructorNames.text.split(" ")
+        fName = instructorName[0]
+        lName = instructorName[instructorName.length - 1]
 
         # add instructor to the list of instructor objects, and search ratemyprofessor for that instructor
-        instructors[i] = Instructor.new fName, lName, department
-        rmpScraper.getInstructorRating instructors[i]
+        instructor = Instructor.new fName, lName, department
+        instructors << instructor
+        rmpScraper.getInstructorRating instructor
         
         # print important information about each instructor
+        puts "First Name: " + instructor.firstName
+        puts "Last Name: " + instructor.lastName
+        puts "Average Rating: " + instructor.avgRating
+        puts "Number of Ratings: " + instructor.numRatings.to_s
+        puts "Would take again percent: " + instructor.wouldTakeAgainPercent
+        puts "Average difficulty: " + instructor.avgDifficulty
         puts ""
-        puts "First Name: " + instructors[i].firstName
-        puts "Last Name: " + instructors[i].lastName
-        puts "Average Rating: " + instructors[i].avgRating
-        puts "Number of Ratings: " + instructors[i].numRatings
-        puts "Would take again percent: " + instructors[i].wouldTakeAgainPercent
-        puts "Average difficulty: " + instructors[i].avgDifficulty
-        puts ""
+        i += 1
     end
     instructors
 end
@@ -44,7 +46,7 @@ def printRmpOSU rmpScraper, department, instructorList
 
     instructorList.length.times do |i|
         # get the first and last name of the each instructor from the mechanize link object
-        instructorName = instructorNames.split(" ")
+        instructorName = instructorList[i].split(" ")
         fName = instructorName[0]
         lName = instructorName[instructorName.length - 1]
 
