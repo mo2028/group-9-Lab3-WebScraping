@@ -11,29 +11,32 @@ class Scraper
     end
 
     def getInstructorsCoursicle cnum
-        # generate search query based on class department and number
-        url = @url + "/#{cnum[0].upcase}/#{cnum[1]}"
-        agent = Mechanize.new
-        agent.user_agent_alias = 'Linux Mozilla'
+        begin
+            # generate search query based on class department and number
+            url = @url + "/#{cnum[0].upcase}/#{cnum[1]}"
+            agent = Mechanize.new
+            agent.user_agent_alias = 'Linux Mozilla'
         
-        # initialize empty list of instructors 
-        instructorList = []
+            # initialize empty list of instructors 
+            instructorList = []
 
-        # retrieve the page from coursicle
-        page = agent.get(url)
-        title = page.title
+            # retrieve the page from coursicle
+            page = agent.get(url)
+            title = page.title
         
-        # print error message if user runs into an issue with the coursicle captcha
-        if title.include? "aptcha"
-            puts "Sorry, the Coursicle search will not work on this network. Using the OSU class search instead."
-            backupURL = "https://content.osu.edu/v2/classes"
-            osuScraper = Scraper.new backupURL
-            instructorList = osuScraper.getInstructorsOSU cnum
-            return instructorList
+            # print error message if user runs into an issue with the coursicle captcha
+            if title.include? "aptcha"
+                puts "Sorry, the Coursicle search will not work on this network. Using the OSU class search instead."
+                backupURL = "https://content.osu.edu/v2/classes"
+                osuScraper = Scraper.new backupURL
+                instructorList = osuScraper.getInstructorsOSU cnum
+                return instructorList
+            end
+            # find all instructors listed on the page if the page is found
+            instructorList = page.links_with(href: %r{https://www.coursicle.com/osu/professors/})
+        rescue Mechanize::ResponseCodeError => e
+            abort "Error: Class not found"
         end
-
-        # find all instructors listed on the page if the page is found
-        instructorList = page.links_with(href: %r{https://www.coursicle.com/osu/professors/})
     end
 
     def getInstructorsOSU cnum
@@ -87,13 +90,17 @@ class Scraper
         unless potentialMatches.length.equal?(0)
             agent = Mechanize.new
             potentialMatches.each do |legacyId|
-                url = "https://www.ratemyprofessors.com/ShowRatings.jsp?tid=#{legacyId}"
-                page = agent.get(url)
+                begin
+                    url = "https://www.ratemyprofessors.com/ShowRatings.jsp?tid=#{legacyId}"
+                    page = agent.get(url)
  
-                if page.body.include?(instructor.department[0..2]) && !page.links_with(href: %r{sid=724}).length.equal?(0)
-                    similarityScores.push(1 + instructor.numRatings = page.search('.jMkisx a').text.to_i)
-                else
-                    similarityScores << 0
+                    if page.body.include?(instructor.department[0..2]) && !page.links_with(href: %r{sid=724}).length.equal?(0)
+                        similarityScores.push(1 + instructor.numRatings = page.search('.jMkisx a').text.to_i)
+                    else
+                        similarityScores << 0
+                    end
+                rescue Mechanize::ResponseCodeError => e
+                    puts "Error: professor not found"
                 end
             end
 
@@ -114,8 +121,8 @@ class Scraper
                 instructor.numRatings = page.search('.jMkisx a').text.to_s if page.search('.jMkisx a').text.to_s != "Add a rating."
 
                 otherInfo = page.search('.kkESWs').map(&:text)
-                instructor.wouldTakeAgainPercent = otherInfo[0].to_s
-                instructor.avgDifficulty = otherInfo[1].to_s
+                instructor.wouldTakeAgainPercent = otherInfo[0].to_s if !otherInfo[0].nil?
+                instructor.avgDifficulty = otherInfo[1].to_s if !otherInfo[1].nil?
             end
         end
     end

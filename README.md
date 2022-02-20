@@ -15,10 +15,11 @@ Gems utilized include Mechanize, Nokogiri and Open-URI.
 To run the program, type **_exactly_** "ruby main.rb" into the terminal, and press enter.
 Two prompts will show up asking you to enter a course subject and a course number. After you enter the course subject and the course number, you can enter '1' to get information from the OSU Class Search or '2' to get information from Coursicle or enter anything else to quit. **_Note_** that getting information from Coursicle may not work on all networks.
 
-You must enter a valid course at the Ohio State University or else the program will not be able to give you the appropriate results.
+You must enter a valid course at the Ohio State University or else the program will not be able to give you the appropriate results. When searching with Coursicle, if a course cannot be found, an error will be thrown and the program will stop running. However, when searching with the OSU class search, if you attempt to search for a class that does not exist (CSE 1009 or MATH 12345 for example), the information returned will not be what you want due to how OSU stores information. Therefore, make sure you correctly enter course numbers.  
+
 
 Using the entered information, the program scrapes data from https://www.coursicle.com/osu/ if chosen '1' or from https://classes.osu.edu/class-search/#/ if chosen '2'. The data collected covers the professors teaching that specific course. This list of professors is then used to scrape https://www.ratemyprofessors.com/ for information about the professor's average rating, number of ratings, would take again percent and average difficulty. The collected information is then outputted ot the user.
 
-**_Note_** that OSU Class Search gives the professors that are going to be teaching in the Spring 2022 semester, but Coursicle includes information about professors that have taught the class in the past as well.
+**_Note_** that OSU Class Search gives the professors that are going to be teaching in the Spring 2022 semester, but Coursicle includes information about professors that have taught the class in the past as well.  
 
 This data can be used in the decision-making process when scheduling classes.

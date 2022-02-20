@@ -16,7 +16,6 @@ def printRmp rmpScraper, department, instructorList
     instructors = []
 
     instructorList.length.times do |i|
-        puts "\nNo.#{i + 1}:"
 
         # get the first and last name of the each instructor depending on which search was used (OSU or Coursicle)
         if instructorList[i].is_a?(String)
@@ -34,6 +33,7 @@ def printRmp rmpScraper, department, instructorList
         rmpScraper.getInstructorRating instructors[i]
         
         # print important information about each instructor
+        puts ""
         puts "First Name: " + instructors[i].firstName
         puts "Last Name: " + instructors[i].lastName
         puts "Average Rating: " + instructors[i].avgRating
