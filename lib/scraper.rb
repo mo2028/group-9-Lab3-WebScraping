@@ -91,7 +91,7 @@ class Scraper
                 page = agent.get(url)
  
                 if page.body.include?(instructor.department[0..2]) && !page.links_with(href: %r{sid=724}).length.equal?(0)
-                    similarityScores << instructor.numRatings = page.search('.jMkisx a').text.to_i
+                    similarityScores.push(1 + instructor.numRatings = page.search('.jMkisx a').text.to_i)
                 else
                     similarityScores << 0
                 end
