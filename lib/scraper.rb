@@ -25,7 +25,11 @@ class Scraper
         
         # print error message if user runs into an issue with the coursicle captcha
         if title.include? "aptcha"
-            abort "Sorry, the Coursicle search will not work on this network. Please restart the program and use the OSU class search instead."
+            puts "Sorry, the Coursicle search will not work on this network. Using the OSU class search instead."
+            backupURL = "https://content.osu.edu/v2/classes"
+            osuScraper = Scraper.new backupURL
+            instructorList = osuScraper.getInstructorsOSU cnum
+            return instructorList
         end
 
         # find all instructors listed on the page if the page is found
@@ -87,11 +91,12 @@ class Scraper
                 page = agent.get(url)
  
                 if page.body.include?(instructor.department[0..2]) && !page.links_with(href: %r{sid=724}).length.equal?(0)
-                    similarityScores << 1
+                    similarityScores << instructor.numRatings = page.search('.jMkisx a').text.to_i
                 else
                     similarityScores << 0
                 end
             end
+
 
             # open the page that most closely matches the instructor's department
             bestMatch = potentialMatches[similarityScores.index(similarityScores.max)]
