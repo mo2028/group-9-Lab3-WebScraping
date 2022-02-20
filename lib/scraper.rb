@@ -50,7 +50,11 @@ class Scraper
 
         # push all unique instructor names associated with the given course to the array 
         doc['data']['courses'][i]['sections'].size.times do |x|
-            instructorList |= [doc['data']['courses'][i]['sections'][x]['meetings'][0]['instructors'][0]['displayName']]
+            doc['data']['courses'][i]['sections'][x]['meetings'][0]['instructors'].size.times do |y|
+                if !doc['data']['courses'][i]['sections'][x]['meetings'][0]['instructors'][y]['displayName'].nil?
+                    instructorList |= [doc['data']['courses'][i]['sections'][x]['meetings'][0]['instructors'][y]['displayName']]
+                end
+            end
         end
         instructorList
     end
@@ -81,11 +85,12 @@ class Scraper
             potentialMatches.each do |legacyId|
                 url = "https://www.ratemyprofessors.com/ShowRatings.jsp?tid=#{legacyId}"
                 page = agent.get(url)
-
-                # Search page and find similarity score (how much does department match text on the page)
-                i = 0
-                i += 1 while i < instructor.department.length - 1 && page.body.include?(instructor.department[0..i])
-                similarityScores.push i
+ 
+                if page.body.include?(instructor.department[0..2]) && !page.links_with(href: %r{sid=724}).length.equal?(0)
+                    similarityScores << 1
+                else
+                    similarityScores << 0
+                end
             end
 
             # open the page that most closely matches the instructor's department
@@ -97,7 +102,7 @@ class Scraper
             # if RMP cannot find the right professor, it will open whichever one has the highest similarity score,
             # which could be 0, so we check that the last name displayed on the page is the last name of the instructor
             # we are looking for
-            lastNameOnPage = page.search('.glXOHH').text.split[0]
+            lastNameOnPage = page.search('.glXOHH').text.split.last
             if lastNameOnPage == instructor.lastName
                 # populate instructor information
                 instructor.avgRating = page.search('.liyUjw').text + "/5" if page.search('.liyUjw').text.to_s != "N/A"

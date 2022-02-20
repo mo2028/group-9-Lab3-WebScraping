@@ -38,6 +38,7 @@ elsif choice == '2'
     # retrieve information about professors found with the Coursicle class search
     printRmp(rmpScraper, cnum[0], instructorList)
     
-else 
+else
+    abort "Please enter only a \"1\" or a \"2\""
 end
 

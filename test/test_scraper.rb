@@ -56,14 +56,14 @@ class TestScraper < MiniTest::Test
             i+=1
         end
 
-        expEce2020Instr = ["Isabel Fernandez Puentes", nil, "Harshith Gunturu"]
+        expEce2020Instr = ["Isabel Fernandez Puentes", "Harshith Gunturu", "Maruf Hossain", "Ahmed Yasser Hamed Ramzy Abdelaziz"]
         ece2020Instr,i = @testSearchUrl.getInstructorsOSU(@ece2020),0
         ece2020Instr.each do |instr|
             assert_equal instr, expEce2020Instr[i]
             i+=1
         end
 
-        expEce2060Instr = ["Furrukh Saeed Khan", nil, "Bernie Melus", "Xinmiao Zhang"]
+        expEce2060Instr = ["Furrukh Saeed Khan", "Bernie Melus", "Banaful Paul", "Srinivasan Subramaniyan", "Xinmiao Zhang"]
         ece2060Instr,i = @testSearchUrl.getInstructorsOSU(@ece2060),0
         ece2060Instr.each do |instr|
             assert_equal instr, expEce2060Instr[i]
